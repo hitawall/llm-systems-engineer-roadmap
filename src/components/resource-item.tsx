@@ -26,19 +26,24 @@ function Chip({ children, className }: { children: React.ReactNode; className: s
 
 export function ResourceItem({ resource }: { resource: Resource }) {
   return (
-    <div className="flex items-start justify-between gap-3 py-1.5">
-      <a
-        href={resource.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-sm leading-snug text-foreground hover:text-primary transition-colors flex-1 min-w-0"
-      >
-        {resource.title}
-      </a>
-      <div className="flex items-center gap-1 shrink-0 mt-0.5">
-        <Chip className={typeColors[resource.type]}>{resource.type}</Chip>
-        <Chip className={costColors[resource.cost]}>{resource.cost}</Chip>
+    <div className="py-1.5 space-y-0.5">
+      <div className="flex items-start justify-between gap-3">
+        <a
+          href={resource.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm leading-snug text-foreground no-underline hover:text-primary transition-colors flex-1 min-w-0"
+        >
+          {resource.title}
+        </a>
+        <div className="flex items-center gap-1 shrink-0 mt-0.5">
+          <Chip className={typeColors[resource.type]}>{resource.type}</Chip>
+          <Chip className={costColors[resource.cost]}>{resource.cost}</Chip>
+        </div>
       </div>
+      {resource.note && (
+        <p className="text-xs text-muted-foreground/70 italic">{resource.note}</p>
+      )}
     </div>
   )
 }

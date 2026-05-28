@@ -30,7 +30,7 @@ export function LevelCard({ level }: { level: Level }) {
               </div>
             </div>
           </AccordionTrigger>
-          <AccordionContent>
+          <AccordionContent className="[&_a]:no-underline [&_a]:hover:text-primary">
             <div className="px-5 pb-5 space-y-0">
               <p className="text-sm text-muted-foreground leading-relaxed pb-4 mb-1 border-b border-border">
                 {level.blurb}
