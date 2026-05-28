@@ -126,10 +126,10 @@ export function useProgress() {
       }))
     },
 
-    // Sets an explicit override; if the override matches the desired value already, removes it (back to auto-detect)
+    // If an explicit override exists, remove it (back to auto-detect). Otherwise set one.
     toggleSkillOverride(skillId: string, desiredComplete: boolean) {
       dispatch(prev => {
-        if (prev.completedSkills[skillId] === desiredComplete) {
+        if (skillId in prev.completedSkills) {
           const rest = Object.fromEntries(
             Object.entries(prev.completedSkills).filter(([k]) => k !== skillId)
           ) as Record<string, boolean>
@@ -160,10 +160,12 @@ export function useProgress() {
 
     importData(json: string) {
       const p = JSON.parse(json) as Partial<Progress>
+      const isPlainObj = (v: unknown): v is Record<string, boolean> =>
+        typeof v === 'object' && v !== null && !Array.isArray(v)
       dispatch(() => ({
-        completedResources: p.completedResources ?? {},
-        completedSkills: p.completedSkills ?? {},
-        currentLevel: p.currentLevel,
+        completedResources: isPlainObj(p.completedResources) ? p.completedResources : {},
+        completedSkills: isPlainObj(p.completedSkills) ? p.completedSkills : {},
+        currentLevel: typeof p.currentLevel === 'string' ? p.currentLevel : undefined,
       }))
     },
 
