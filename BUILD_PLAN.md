@@ -29,7 +29,7 @@ PR: _pending_
 - [x] Overall weighted-by-priority progress bar (header)
 - [x] "I am here" current-level selector + highlight
 - [x] Export JSON / Import JSON / Reset with confirm
-PR: _pending_
+PR: #5
 
 ## Phase 3 — Value-adds (notes + project log + time tracking)
 - [ ] `src/app/projects/page.tsx` — Per-level project log; entry: title, description, url, shippedAt
