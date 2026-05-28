@@ -1,3 +1,8 @@
+'use client'
+
+import { cn } from '@/lib/utils'
+import { Checkbox } from '@/components/ui/checkbox'
+import { useProgress } from '@/hooks/use-progress'
 import type { Resource, ResourceType, ResourceCost } from '@/data/types'
 
 const typeColors: Record<ResourceType, string> = {
@@ -25,25 +30,39 @@ function Chip({ children, className }: { children: React.ReactNode; className: s
 }
 
 export function ResourceItem({ resource }: { resource: Resource }) {
+  const { progress, toggleResource } = useProgress()
+  const checked = !!progress.completedResources[resource.id]
+
   return (
-    <div className="py-1.5 space-y-0.5">
-      <div className="flex items-start justify-between gap-3">
-        <a
-          href={resource.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm leading-snug text-foreground !no-underline hover:!text-primary transition-colors flex-1 min-w-0"
-        >
-          {resource.title}
-        </a>
-        <div className="flex items-center gap-1 shrink-0 mt-0.5">
-          <Chip className={typeColors[resource.type]}>{resource.type}</Chip>
-          <Chip className={costColors[resource.cost]}>{resource.cost}</Chip>
+    <div className="flex items-start gap-2.5 py-1.5">
+      <Checkbox
+        checked={checked}
+        onCheckedChange={() => toggleResource(resource.id)}
+        className="mt-0.5 shrink-0"
+        aria-label={`Mark "${resource.title}" as complete`}
+      />
+      <div className="flex-1 min-w-0 space-y-0.5">
+        <div className="flex items-start justify-between gap-3">
+          <a
+            href={resource.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'text-sm leading-snug !no-underline hover:!text-primary transition-colors flex-1 min-w-0',
+              checked && 'line-through text-muted-foreground'
+            )}
+          >
+            {resource.title}
+          </a>
+          <div className="flex items-center gap-1 shrink-0 mt-0.5">
+            <Chip className={typeColors[resource.type]}>{resource.type}</Chip>
+            <Chip className={costColors[resource.cost]}>{resource.cost}</Chip>
+          </div>
         </div>
+        {resource.note && (
+          <p className="text-xs text-muted-foreground/70 italic">{resource.note}</p>
+        )}
       </div>
-      {resource.note && (
-        <p className="text-xs text-muted-foreground/70 italic">{resource.note}</p>
-      )}
     </div>
   )
 }

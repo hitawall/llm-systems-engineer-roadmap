@@ -23,12 +23,12 @@ PR: #3
 PR: _pending_
 
 ## Phase 2 — Personal progress
-- [ ] `src/hooks/use-progress.ts` — `useSyncExternalStore` over localStorage (`llm-roadmap:progress:v1`)
-- [ ] Checkbox per resource; skill auto-completes when all resources checked (manual override)
-- [ ] Level % complete
-- [ ] Overall weighted-by-priority progress bar (header)
-- [ ] "I am here" current-level selector + highlight
-- [ ] Export JSON / Import JSON / Reset with confirm
+- [x] `src/hooks/use-progress.ts` — `useSyncExternalStore` over localStorage (`llm-roadmap:progress:v1`)
+- [x] Checkbox per resource; skill auto-completes when all resources checked (manual override)
+- [x] Level % complete
+- [x] Overall weighted-by-priority progress bar (header)
+- [x] "I am here" current-level selector + highlight
+- [x] Export JSON / Import JSON / Reset with confirm
 PR: _pending_
 
 ## Phase 3 — Value-adds (notes + project log + time tracking)
