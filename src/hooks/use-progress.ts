@@ -126,8 +126,9 @@ export function useProgress() {
       }))
     },
 
-    // If an explicit override exists, remove it (back to auto-detect). Otherwise set one.
-    toggleSkillOverride(skillId: string, desiredComplete: boolean) {
+    // If an explicit override exists, remove it (back to auto-detect).
+    // If absent, set to the opposite of the current auto-detected value (resources only, no override).
+    toggleSkillOverride(skillId: string, resourceIds: string[]) {
       dispatch(prev => {
         if (skillId in prev.completedSkills) {
           const rest = Object.fromEntries(
@@ -135,9 +136,10 @@ export function useProgress() {
           ) as Record<string, boolean>
           return { ...prev, completedSkills: rest }
         }
+        const autoComplete = resourceIds.length > 0 && resourceIds.every(r => prev.completedResources[r])
         return {
           ...prev,
-          completedSkills: { ...prev.completedSkills, [skillId]: desiredComplete },
+          completedSkills: { ...prev.completedSkills, [skillId]: !autoComplete },
         }
       })
     },
