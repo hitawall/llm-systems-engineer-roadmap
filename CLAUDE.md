@@ -36,3 +36,11 @@ This is a **Next.js 16 App Router** app (TypeScript + Tailwind v4 + shadcn/ui `b
 ## Dev tracker
 
 See `BUILD_PLAN.md` at repo root for phase/feature checklists. Update checkboxes in the same PR that lands the work.
+
+## Token discipline
+
+Global rules live in `~/.claude/CLAUDE.md` (model selection, cache discipline, context hygiene). Repo-specific additions:
+
+- Reference data with `@src/data/roadmap.ts` rather than pasting content into the prompt.
+- Phase content drafts go through plan mode first — never start large content writes ad-hoc.
+- `BUILD_PLAN.md` checkbox updates don't need their own commit; bundle them with the phase PR.
