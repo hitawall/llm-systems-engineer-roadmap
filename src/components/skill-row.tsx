@@ -44,7 +44,7 @@ export function SkillRow({ skill }: { skill: Skill }) {
         <div className="ml-auto flex items-center gap-1.5 shrink-0">
           <Checkbox
             checked={complete}
-            onCheckedChange={() => toggleSkillOverride(skill.id)}
+            onCheckedChange={() => toggleSkillOverride(skill.id, !complete)}
             className="size-3.5"
             aria-label={`Mark "${skill.title}" as complete`}
           />

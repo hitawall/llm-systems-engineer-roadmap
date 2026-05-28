@@ -4,24 +4,24 @@ import { useEffect, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-function getInitialDark() {
-  if (typeof window === "undefined") return false
-  const stored = localStorage.getItem("theme")
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-  return stored === "dark" || (!stored && prefersDark)
-}
-
 export function ThemeToggle() {
-  const [dark, setDark] = useState(getInitialDark)
+  const [dark, setDark] = useState(false)
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark)
-    document.documentElement.classList.toggle("light", !dark)
-  }, [dark])
+    const stored = localStorage.getItem("theme")
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const isDark = stored === "dark" || (!stored && prefersDark)
+    document.documentElement.classList.toggle("dark", isDark)
+    document.documentElement.classList.toggle("light", !isDark)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDark(isDark)
+  }, [])
 
   function toggle() {
     const next = !dark
     setDark(next)
+    document.documentElement.classList.toggle("dark", next)
+    document.documentElement.classList.toggle("light", !next)
     localStorage.setItem("theme", next ? "dark" : "light")
   }
 

@@ -28,7 +28,7 @@ function readStorage(): Progress {
 // Module-level store — shared across all hook instances
 let _snap: Progress = DEFAULT_PROGRESS
 let _hydrated = false
-let _storageListenerAdded = false
+let _storageHandler: ((e: StorageEvent) => void) | null = null
 let _listeners: Array<() => void> = []
 
 function notify(): void {
@@ -102,15 +102,14 @@ export function useProgress() {
       _snap = readStorage()
       notify()
     }
-    if (!_storageListenerAdded) {
-      _storageListenerAdded = true
-      const handler = (e: StorageEvent) => {
+    if (!_storageHandler) {
+      _storageHandler = (e: StorageEvent) => {
         if (e.key === STORAGE_KEY) {
           _snap = readStorage()
           notify()
         }
       }
-      window.addEventListener('storage', handler)
+      window.addEventListener('storage', _storageHandler)
     }
   }, [])
 
@@ -127,10 +126,10 @@ export function useProgress() {
       }))
     },
 
-    // Toggles a manual override: explicitly-true ↔ back to auto-detect
-    toggleSkillOverride(skillId: string) {
+    // Sets an explicit override; if the override matches the desired value already, removes it (back to auto-detect)
+    toggleSkillOverride(skillId: string, desiredComplete: boolean) {
       dispatch(prev => {
-        if (prev.completedSkills[skillId] === true) {
+        if (prev.completedSkills[skillId] === desiredComplete) {
           const rest = Object.fromEntries(
             Object.entries(prev.completedSkills).filter(([k]) => k !== skillId)
           ) as Record<string, boolean>
@@ -138,7 +137,7 @@ export function useProgress() {
         }
         return {
           ...prev,
-          completedSkills: { ...prev.completedSkills, [skillId]: true },
+          completedSkills: { ...prev.completedSkills, [skillId]: desiredComplete },
         }
       })
     },
