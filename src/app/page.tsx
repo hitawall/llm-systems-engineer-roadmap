@@ -1,31 +1,47 @@
+import { levels } from '@/data/roadmap'
+import { LevelCard } from '@/components/level-card'
+
 export default function Home() {
   return (
-    <div className="mx-auto max-w-4xl px-4 py-16 space-y-8">
-      <div>
+    <div className="mx-auto max-w-4xl px-4 py-12 space-y-8">
+      <div className="space-y-3">
         <h1 className="text-3xl font-bold tracking-tight">LLM Systems Engineer Roadmap</h1>
-        <p className="mt-3 text-muted-foreground leading-7">
-          A personal learning tracker for pivoting from backend engineering into building and deploying LLM systems.
-          Phase 1 (the full roadmap) is coming next.
+        <p className="text-muted-foreground leading-7 max-w-2xl">
+          A personal learning tracker for pivoting into building and deploying LLM systems.
+          5–8 hrs/week · ~14–20 calendar weeks to portfolio-ready.
         </p>
+        <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
+          <span>
+            <span className="inline-block w-2 h-2 rounded-full bg-rose-500/60 mr-1.5" />
+            core
+          </span>
+          <span>
+            <span className="inline-block w-2 h-2 rounded-full bg-blue-500/60 mr-1.5" />
+            recommended
+          </span>
+          <span>
+            <span className="inline-block w-2 h-2 rounded-full bg-zinc-400/60 mr-1.5" />
+            optional
+          </span>
+          <span className="ml-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500/60 mr-1.5" />
+            free
+          </span>
+          <span>
+            <span className="inline-block w-2 h-2 rounded-full bg-amber-500/60 mr-1.5" />
+            paid
+          </span>
+          <span>
+            <span className="inline-block w-2 h-2 rounded-full bg-sky-500/60 mr-1.5" />
+            freemium
+          </span>
+        </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-muted/40 p-6 space-y-3 text-sm">
-        <div>
-          <span className="font-medium text-foreground">Pace — </span>
-          <span className="text-muted-foreground">5–8 hrs/week · ~14–20 calendar weeks to portfolio-ready.</span>
-        </div>
-        <div>
-          <span className="font-medium text-foreground">Target roles — </span>
-          <span className="text-muted-foreground">
-            LLM Product Engineer, LLMOps / MLOps Engineer, LLM Engineer (RAG), AI Solutions Architect.
-          </span>
-        </div>
-        <div>
-          <span className="font-medium text-foreground">Edge — </span>
-          <span className="text-muted-foreground">
-            The 2026 market wants "can you ship AI to production reliably," not "can you train a model."
-          </span>
-        </div>
+      <div className="space-y-3">
+        {levels.map(level => (
+          <LevelCard key={level.id} level={level} />
+        ))}
       </div>
     </div>
   )
