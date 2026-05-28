@@ -13,7 +13,7 @@ export const DEFAULT_PROGRESS: Progress = {
 function readStorage(): Progress {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return DEFAULT_PROGRESS
+    if (!raw) return { ...DEFAULT_PROGRESS }
     const p = JSON.parse(raw) as Partial<Progress>
     return {
       completedResources: p.completedResources ?? {},
@@ -21,7 +21,7 @@ function readStorage(): Progress {
       currentLevel: p.currentLevel,
     }
   } catch {
-    return DEFAULT_PROGRESS
+    return { ...DEFAULT_PROGRESS }
   }
 }
 
@@ -104,12 +104,13 @@ export function useProgress() {
     }
     if (!_storageListenerAdded) {
       _storageListenerAdded = true
-      window.addEventListener('storage', (e: StorageEvent) => {
+      const handler = (e: StorageEvent) => {
         if (e.key === STORAGE_KEY) {
           _snap = readStorage()
           notify()
         }
-      })
+      }
+      window.addEventListener('storage', handler)
     }
   }, [])
 
@@ -130,7 +131,9 @@ export function useProgress() {
     toggleSkillOverride(skillId: string) {
       dispatch(prev => {
         if (prev.completedSkills[skillId] === true) {
-          const { [skillId]: _removed, ...rest } = prev.completedSkills
+          const rest = Object.fromEntries(
+            Object.entries(prev.completedSkills).filter(([k]) => k !== skillId)
+          ) as Record<string, boolean>
           return { ...prev, completedSkills: rest }
         }
         return {
