@@ -8,18 +8,18 @@ Update checkboxes in the same PR that lands the work.
 - [x] shadcn/ui init + base components (Button, Card, Accordion, Checkbox, Badge, Progress, Dialog, Tabs, Input, Textarea, Toggle)
 - [x] App shell (header, footer, dark mode toggle)
 - [x] About page with honest caveat (spec §6)
-- [ ] Vercel link + green prod build
+- [x] Vercel link + green prod build
 - [x] BUILD_PLAN.md committed
-PR: _pending_
+PR: #3
 
 ## Phase 1 — Read-only roadmap
-- [ ] `src/data/types.ts` — Level, Skill, Resource, ProjectIdea, ReadingItem, Progress types
-- [ ] `src/data/roadmap.ts` — Levels 0–6 (incl. Interview Prep), project ideas, tags per skill, resource types
-- [ ] `src/data/reading-list.ts` — ~15 curated papers/blogs/posts
-- [ ] `src/components/level-card.tsx` — Accordion with prereq, estWeeks, blurb
-- [ ] `src/components/skill-row.tsx` — Priority badge, tags, note, resources
-- [ ] `src/components/resource-item.tsx` — Cost/type badges, external link
-- [ ] `src/app/page.tsx` — Render full roadmap, mobile responsive
+- [x] `src/data/types.ts` — Level, Skill, Resource, ProjectIdea, ReadingItem, Progress types
+- [x] `src/data/roadmap.ts` — Levels 0–6 (incl. Interview Prep), project ideas, tags per skill, resource types
+- [x] `src/data/reading-list.ts` — ~15 curated papers/blogs/posts
+- [x] `src/components/level-card.tsx` — Accordion with prereq, estWeeks, blurb
+- [x] `src/components/skill-row.tsx` — Priority badge, tags, note, resources
+- [x] `src/components/resource-item.tsx` — Cost/type badges, external link
+- [x] `src/app/page.tsx` — Render full roadmap, mobile responsive
 PR: _pending_
 
 ## Phase 2 — Personal progress
