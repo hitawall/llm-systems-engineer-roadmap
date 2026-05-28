@@ -32,7 +32,7 @@ export function ResourceItem({ resource }: { resource: Resource }) {
           href={resource.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm leading-snug text-foreground no-underline hover:text-primary transition-colors flex-1 min-w-0"
+          className="text-sm leading-snug text-foreground !no-underline hover:!text-primary transition-colors flex-1 min-w-0"
         >
           {resource.title}
         </a>
