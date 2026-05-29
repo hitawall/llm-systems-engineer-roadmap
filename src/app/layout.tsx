@@ -15,10 +15,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+const SITE_URL = 'https://llm-roadmap.vercel.app'
+
 export const metadata: Metadata = {
   title: "LLM Systems Engineer Roadmap",
   description:
     "A personal learning tracker for pivoting into LLM systems engineering — RAG, agents, eval, deployment, and beyond.",
+  metadataBase: new URL(SITE_URL),
+  openGraph: {
+    title: "LLM Systems Engineer Roadmap",
+    description: "A structured path from Python basics to production AI systems — RAG, agents, evals, fine-tuning, and beyond.",
+    url: SITE_URL,
+    siteName: "LLM Systems Engineer Roadmap",
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "LLM Systems Engineer Roadmap",
+    description: "A structured path from Python basics to production AI systems — RAG, agents, evals, fine-tuning, and beyond.",
+  },
 }
 
 export default function RootLayout({

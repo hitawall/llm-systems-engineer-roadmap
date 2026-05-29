@@ -58,4 +58,4 @@ PR: _pending_
 - [ ] Cloud sync (Vercel Postgres + NextAuth)
 - [ ] Custom domain
 - [ ] Vercel Analytics
-- [ ] OG image for social sharing
+- [x] OG image for social sharing
