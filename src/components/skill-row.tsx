@@ -1,10 +1,14 @@
 'use client'
 
+import { useState } from 'react'
+import { Clock, NotebookPen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useProgress, isSkillComplete } from '@/hooks/use-progress'
+import { useProgress, isSkillComplete, getSkillHours } from '@/hooks/use-progress'
 import type { Skill, Priority } from '@/data/types'
 import { ResourceItem } from './resource-item'
+import { SkillNotes } from './skill-notes'
+import { SkillTimeTracker } from './skill-time-tracker'
 
 const priorityStyles: Record<Priority, string> = {
   core: 'bg-rose-500/10 text-rose-700 dark:text-rose-400',
@@ -23,6 +27,10 @@ function Chip({ children, className }: { children: React.ReactNode; className: s
 export function SkillRow({ skill }: { skill: Skill }) {
   const { progress, toggleSkillOverride } = useProgress()
   const complete = isSkillComplete(skill, progress)
+  const totalHours = getSkillHours(progress.timeEntries, skill.id)
+
+  const [notesOpen, setNotesOpen] = useState(false)
+  const [timeOpen, setTimeOpen] = useState(false)
 
   return (
     <div className="py-3 space-y-2">
@@ -57,6 +65,36 @@ export function SkillRow({ skill }: { skill: Skill }) {
         {skill.resources.map(resource => (
           <ResourceItem key={resource.id} resource={resource} />
         ))}
+      </div>
+
+      {/* Expandable panels */}
+      {notesOpen && <SkillNotes skillId={skill.id} />}
+      {timeOpen && <SkillTimeTracker skillId={skill.id} />}
+
+      {/* Toggle buttons */}
+      <div className="flex items-center gap-3 pt-1">
+        <button
+          type="button"
+          onClick={() => setNotesOpen(!notesOpen)}
+          className={cn(
+            'flex items-center gap-1 text-xs transition-colors',
+            notesOpen ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          <NotebookPen className="size-3" />
+          Notes
+        </button>
+        <button
+          type="button"
+          onClick={() => setTimeOpen(!timeOpen)}
+          className={cn(
+            'flex items-center gap-1 text-xs transition-colors',
+            timeOpen ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          <Clock className="size-3" />
+          {totalHours > 0 ? `${totalHours}h logged` : 'Log time'}
+        </button>
       </div>
     </div>
   )
