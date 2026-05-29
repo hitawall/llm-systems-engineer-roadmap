@@ -14,7 +14,7 @@ import type { FilteredSkill } from './roadmap-view'
 
 export function LevelCard({ level, filteredSkills }: { level: Level; filteredSkills?: FilteredSkill[] }) {
   const { progress, setCurrentLevel } = useProgress()
-  const pct = getLevelPercent(level, progress)
+  const pct = getLevelPercent(level, progress, filteredSkills?.map(f => f.skill))
   const isCurrent = progress.currentLevel === level.id
 
   return (

@@ -1,7 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { cn } from '@/lib/utils'
 import { useProgress, getOverallPercent } from '@/hooks/use-progress'
+import { getLiteFilteredLevels, LITE_STATS } from '@/data/lite-mode'
 import type { Level, Resource, Skill } from '@/data/types'
 import { LevelCard } from './level-card'
 import { ProgressControls } from './progress-controls'
@@ -19,10 +21,12 @@ function getAllTags(levels: Level[]): string[] {
 }
 
 export function RoadmapView({ levels }: { levels: Level[] }) {
-  const { progress } = useProgress()
-  const overall = getOverallPercent(levels, progress)
+  const { progress, setLiteMode } = useProgress()
+  const liteMode = progress.liteMode
+  const baseLevels = liteMode ? getLiteFilteredLevels(levels) : levels
+  const overall = getOverallPercent(baseLevels, progress)
   const [filters, setFilters] = useState<FilterState>(emptyFilters)
-  const allTags = useMemo(() => getAllTags(levels), [levels])
+  const allTags = useMemo(() => getAllTags(baseLevels), [baseLevels])
 
   const displayLevels = useMemo(() => {
     if (!isFiltering(filters)) return null  // null = show everything unmodified
@@ -30,7 +34,7 @@ export function RoadmapView({ levels }: { levels: Level[] }) {
     const { search, freeOnly, activeTypes, activeTags } = filters
     const q = search.toLowerCase()
 
-    return levels
+    return baseLevels
       .map(level => {
         const skills: FilteredSkill[] = level.skills
           .filter(skill => {
@@ -53,9 +57,9 @@ export function RoadmapView({ levels }: { levels: Level[] }) {
         return { level, skills }
       })
       .filter(item => item.skills.length > 0)
-  }, [levels, filters])
+  }, [baseLevels, filters])
 
-  const levelsToRender = displayLevels ?? levels.map(level => ({ level, skills: null }))
+  const levelsToRender = displayLevels ?? baseLevels.map(level => ({ level, skills: null }))
   const resultCount = displayLevels
     ? displayLevels.reduce((s, l) => s + l.skills.length, 0)
     : null
@@ -89,14 +93,47 @@ export function RoadmapView({ levels }: { levels: Level[] }) {
             freemium
           </span>
         </div>
-        {overall > 0 && (
-          <span className="text-sm font-medium tabular-nums text-primary">
-            {overall}% overall
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {overall > 0 && (
+            <span className="text-sm font-medium tabular-nums text-primary">
+              {overall}% overall
+            </span>
+          )}
+          {liteMode && (
+            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+              Lite
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setLiteMode(true)}
+            className={cn(
+              'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+              liteMode
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground'
+            )}
+          >
+            Lite · {LITE_STATS.skillCount} skills · ~{LITE_STATS.estWeeks}w
+          </button>
+          <button
+            type="button"
+            onClick={() => setLiteMode(false)}
+            className={cn(
+              'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+              !liteMode
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground'
+            )}
+          >
+            Full · {LITE_STATS.fullSkillCount} skills · ~{LITE_STATS.fullEstWeeks}w
+          </button>
+        </div>
         <p className="text-xs text-muted-foreground">
           Click the level number to mark your current position.
         </p>

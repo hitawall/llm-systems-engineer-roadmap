@@ -70,4 +70,5 @@ export interface Progress {
   notes: Record<string, string>
   projectEntries: ProjectEntry[]
   timeEntries: TimeEntry[]
+  liteMode: boolean
 }
