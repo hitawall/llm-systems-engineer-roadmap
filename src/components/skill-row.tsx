@@ -5,7 +5,7 @@ import { Clock, NotebookPen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useProgress, isSkillComplete, getSkillHours } from '@/hooks/use-progress'
-import type { Skill, Priority } from '@/data/types'
+import type { Resource, Skill, Priority } from '@/data/types'
 import { ResourceItem } from './resource-item'
 import { SkillNotes } from './skill-notes'
 import { SkillTimeTracker } from './skill-time-tracker'
@@ -24,7 +24,7 @@ function Chip({ children, className }: { children: React.ReactNode; className: s
   )
 }
 
-export function SkillRow({ skill }: { skill: Skill }) {
+export function SkillRow({ skill, visibleResources }: { skill: Skill; visibleResources?: Resource[] }) {
   const { progress, toggleSkillOverride } = useProgress()
   const complete = isSkillComplete(skill, progress)
   const totalHours = getSkillHours(progress.timeEntries, skill.id)
@@ -62,9 +62,12 @@ export function SkillRow({ skill }: { skill: Skill }) {
         <p className="text-xs text-muted-foreground leading-relaxed">{skill.blurb}</p>
       )}
       <div className="divide-y divide-border/50">
-        {skill.resources.map(resource => (
+        {(visibleResources ?? skill.resources).map(resource => (
           <ResourceItem key={resource.id} resource={resource} />
         ))}
+        {visibleResources && visibleResources.length === 0 && (
+          <p className="py-2 text-xs text-muted-foreground italic">No resources match the active filters.</p>
+        )}
       </div>
 
       {/* Expandable panels */}

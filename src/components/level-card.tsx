@@ -10,8 +10,9 @@ import {
 import { useProgress, getLevelPercent } from '@/hooks/use-progress'
 import type { Level } from '@/data/types'
 import { SkillRow } from './skill-row'
+import type { FilteredSkill } from './roadmap-view'
 
-export function LevelCard({ level }: { level: Level }) {
+export function LevelCard({ level, filteredSkills }: { level: Level; filteredSkills?: FilteredSkill[] }) {
   const { progress, setCurrentLevel } = useProgress()
   const pct = getLevelPercent(level, progress)
   const isCurrent = progress.currentLevel === level.id
@@ -82,8 +83,8 @@ export function LevelCard({ level }: { level: Level }) {
                   {level.blurb}
                 </p>
                 <div className="divide-y divide-border">
-                  {level.skills.map(skill => (
-                    <SkillRow key={skill.id} skill={skill} />
+                  {(filteredSkills ?? level.skills.map(s => ({ skill: s, visibleResources: undefined }))).map(({ skill, visibleResources }) => (
+                    <SkillRow key={skill.id} skill={skill} visibleResources={visibleResources} />
                   ))}
                 </div>
               </div>
