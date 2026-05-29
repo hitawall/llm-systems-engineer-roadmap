@@ -32,9 +32,9 @@ PR: _pending_
 PR: #5
 
 ## Phase 3 — Value-adds (notes + project log + time tracking)
-- [ ] `src/app/projects/page.tsx` — Per-level project log; entry: title, description, url, shippedAt
-- [ ] Notes per skill — markdown textarea + react-markdown preview; autosaved to localStorage
-- [ ] Time tracking — quick-add (date, skillId, hours, note); per-skill totals on SkillRow; weekly total in header
+- [x] `src/app/projects/page.tsx` — Per-level project log; entry: title, description, url, shippedAt
+- [x] Notes per skill — markdown textarea + react-markdown preview; autosaved to localStorage
+- [x] Time tracking — quick-add (date, skillId, hours, note); per-skill totals on SkillRow; weekly total in header
 PR: _pending_
 
 ## Phase 4 — Polish (filters, search, side pages)

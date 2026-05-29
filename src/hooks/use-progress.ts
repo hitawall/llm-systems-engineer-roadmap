@@ -1,13 +1,20 @@
 'use client'
 
 import { useEffect, useSyncExternalStore } from 'react'
-import type { Level, Progress, Skill } from '@/data/types'
+import type { Level, Progress, ProjectEntry, Skill, TimeEntry } from '@/data/types'
 
 const STORAGE_KEY = 'llm-roadmap:progress:v1'
 
 export const DEFAULT_PROGRESS: Progress = {
   completedResources: {},
   completedSkills: {},
+  notes: {},
+  projectEntries: [],
+  timeEntries: [],
+}
+
+function genId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
 }
 
 function readStorage(): Progress {
@@ -15,10 +22,15 @@ function readStorage(): Progress {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return { ...DEFAULT_PROGRESS }
     const p = JSON.parse(raw) as Partial<Progress>
+    const isPlainObj = (v: unknown): v is Record<string, unknown> =>
+      typeof v === 'object' && v !== null && !Array.isArray(v)
     return {
-      completedResources: p.completedResources ?? {},
-      completedSkills: p.completedSkills ?? {},
-      currentLevel: p.currentLevel,
+      completedResources: isPlainObj(p.completedResources) ? (p.completedResources as Record<string, boolean>) : {},
+      completedSkills: isPlainObj(p.completedSkills) ? (p.completedSkills as Record<string, boolean>) : {},
+      currentLevel: typeof p.currentLevel === 'string' ? p.currentLevel : undefined,
+      notes: isPlainObj(p.notes) ? (p.notes as Record<string, string>) : {},
+      projectEntries: Array.isArray(p.projectEntries) ? p.projectEntries : [],
+      timeEntries: Array.isArray(p.timeEntries) ? p.timeEntries : [],
     }
   } catch {
     return { ...DEFAULT_PROGRESS }
@@ -90,6 +102,29 @@ export function getOverallPercent(levels: Level[], progress: Progress): number {
   return total === 0 ? 0 : Math.round((done / total) * 100)
 }
 
+export function getWeeklyHours(timeEntries: TimeEntry[]): number {
+  const now = new Date()
+  const dayOfWeek = now.getDay() // 0=Sun
+  const monday = new Date(now)
+  monday.setDate(now.getDate() - ((dayOfWeek + 6) % 7))
+  monday.setHours(0, 0, 0, 0)
+  const sunday = new Date(monday)
+  sunday.setDate(monday.getDate() + 7)
+
+  return timeEntries
+    .filter(e => {
+      const d = new Date(e.date)
+      return d >= monday && d < sunday
+    })
+    .reduce((sum, e) => sum + e.hours, 0)
+}
+
+export function getSkillHours(timeEntries: TimeEntry[], skillId: string): number {
+  return timeEntries
+    .filter(e => e.skillId === skillId)
+    .reduce((sum, e) => sum + e.hours, 0)
+}
+
 // --- Hook ---
 
 export function useProgress() {
@@ -148,6 +183,48 @@ export function useProgress() {
       dispatch(prev => ({ ...prev, currentLevel: levelId }))
     },
 
+    setNote(skillId: string, markdown: string) {
+      dispatch(prev => ({
+        ...prev,
+        notes: { ...prev.notes, [skillId]: markdown },
+      }))
+    },
+
+    addProjectEntry(entry: Omit<ProjectEntry, 'id'>) {
+      dispatch(prev => ({
+        ...prev,
+        projectEntries: [...prev.projectEntries, { ...entry, id: genId() }],
+      }))
+    },
+
+    updateProjectEntry(id: string, updates: Partial<Omit<ProjectEntry, 'id'>>) {
+      dispatch(prev => ({
+        ...prev,
+        projectEntries: prev.projectEntries.map(e => e.id === id ? { ...e, ...updates } : e),
+      }))
+    },
+
+    deleteProjectEntry(id: string) {
+      dispatch(prev => ({
+        ...prev,
+        projectEntries: prev.projectEntries.filter(e => e.id !== id),
+      }))
+    },
+
+    addTimeEntry(entry: Omit<TimeEntry, 'id'>) {
+      dispatch(prev => ({
+        ...prev,
+        timeEntries: [...prev.timeEntries, { ...entry, id: genId() }],
+      }))
+    },
+
+    deleteTimeEntry(id: string) {
+      dispatch(prev => ({
+        ...prev,
+        timeEntries: prev.timeEntries.filter(e => e.id !== id),
+      }))
+    },
+
     exportData() {
       const blob = new Blob([JSON.stringify(_snap, null, 2)], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
@@ -168,6 +245,9 @@ export function useProgress() {
         completedResources: isPlainObj(p.completedResources) ? p.completedResources : {},
         completedSkills: isPlainObj(p.completedSkills) ? p.completedSkills : {},
         currentLevel: typeof p.currentLevel === 'string' ? p.currentLevel : undefined,
+        notes: isPlainObj(p.notes) ? (p.notes as Record<string, string>) : {},
+        projectEntries: Array.isArray(p.projectEntries) ? p.projectEntries : [],
+        timeEntries: Array.isArray(p.timeEntries) ? p.timeEntries : [],
       }))
     },
 

@@ -40,6 +40,12 @@ export default function RootLayout({
             </Link>
             <nav className="flex items-center gap-2">
               <Link
+                href="/projects"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
+              >
+                Projects
+              </Link>
+              <Link
                 href="/about"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
               >
