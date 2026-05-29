@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
 import { Geist, Geist_Mono } from "next/font/google"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -86,6 +87,7 @@ export default function RootLayout({
         </header>
 
         <main className="flex-1">{children}</main>
+        <Analytics />
 
         <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
           <p>

@@ -57,5 +57,5 @@ PR: _pending_
 ## Phase 5 — Deferred / optional
 - [ ] Cloud sync (Vercel Postgres + NextAuth)
 - [ ] Custom domain
-- [ ] Vercel Analytics
+- [x] Vercel Analytics
 - [x] OG image for social sharing
