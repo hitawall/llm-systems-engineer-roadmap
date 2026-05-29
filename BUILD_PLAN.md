@@ -38,11 +38,11 @@ PR: #5
 PR: _pending_
 
 ## Phase 4 — Polish (filters, search, side pages)
-- [ ] Filter bar — cost toggle (free only), resource-type chips (multi), tag chips (multi)
-- [ ] Search — substring across skill/resource titles
-- [ ] `src/app/reading/page.tsx` — Curated reading list with type/tag filters
-- [ ] `src/app/interview-prep/page.tsx` — Level 6: system-design prompts, behavioral, paper list
-- [ ] About page polish
+- [x] Filter bar — cost toggle (free only), resource-type chips (multi), tag chips (multi)
+- [x] Search — substring across skill/resource titles
+- [x] `src/app/reading/page.tsx` — Curated reading list with type/tag filters
+- [x] `src/app/interview-prep/page.tsx` — Level 6: system-design prompts, behavioral, paper list
+- [x] About page polish
 PR: _pending_
 
 ## Phase 5 — Deferred / optional

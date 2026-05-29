@@ -46,6 +46,18 @@ export default function RootLayout({
                 Projects
               </Link>
               <Link
+                href="/reading"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
+              >
+                Reading
+              </Link>
+              <Link
+                href="/interview-prep"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
+              >
+                Interview
+              </Link>
+              <Link
                 href="/about"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
               >
