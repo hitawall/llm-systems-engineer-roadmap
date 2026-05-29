@@ -11,6 +11,7 @@ export const DEFAULT_PROGRESS: Progress = {
   notes: {},
   projectEntries: [],
   timeEntries: [],
+  liteMode: false,
 }
 
 function genId(): string {
@@ -31,6 +32,7 @@ function readStorage(): Progress {
       notes: isPlainObj(p.notes) ? (p.notes as Record<string, string>) : {},
       projectEntries: Array.isArray(p.projectEntries) ? p.projectEntries : [],
       timeEntries: Array.isArray(p.timeEntries) ? p.timeEntries : [],
+      liteMode: typeof p.liteMode === 'boolean' ? p.liteMode : false,
     }
   } catch {
     return { ...DEFAULT_PROGRESS }
@@ -83,10 +85,12 @@ const WEIGHT: Record<'core' | 'recommended' | 'optional', number> = {
   optional: 1,
 }
 
-export function getLevelPercent(level: Level, progress: Progress): number {
-  if (level.skills.length === 0) return 0
-  const done = level.skills.filter(s => isSkillComplete(s, progress)).length
-  return Math.round((done / level.skills.length) * 100)
+// Optional `skills` param allows LevelCard to compute % from only the visible (lite/filtered) skills
+export function getLevelPercent(level: Level, progress: Progress, skills?: Skill[]): number {
+  const s = skills ?? level.skills
+  if (s.length === 0) return 0
+  const done = s.filter(sk => isSkillComplete(sk, progress)).length
+  return Math.round((done / s.length) * 100)
 }
 
 export function getOverallPercent(levels: Level[], progress: Progress): number {
@@ -183,6 +187,10 @@ export function useProgress() {
       dispatch(prev => ({ ...prev, currentLevel: levelId }))
     },
 
+    setLiteMode(value: boolean) {
+      dispatch(prev => ({ ...prev, liteMode: value }))
+    },
+
     setNote(skillId: string, markdown: string) {
       dispatch(prev => ({
         ...prev,
@@ -248,6 +256,7 @@ export function useProgress() {
         notes: isPlainObj(p.notes) ? (p.notes as Record<string, string>) : {},
         projectEntries: Array.isArray(p.projectEntries) ? p.projectEntries : [],
         timeEntries: Array.isArray(p.timeEntries) ? p.timeEntries : [],
+        liteMode: typeof p.liteMode === 'boolean' ? p.liteMode : false,
       }))
     },
 

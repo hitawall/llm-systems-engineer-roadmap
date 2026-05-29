@@ -45,6 +45,15 @@ PR: _pending_
 - [x] About page polish
 PR: _pending_
 
+## Phase 6 — Lite mode
+- [x] `src/data/lite-mode.ts` — LITE_SKILL_IDS (22), LITE_RESOURCE_IDS (36), `getLiteFilteredLevels()`, `LITE_STATS`
+- [x] `src/data/types.ts` — add `liteMode: boolean` to Progress
+- [x] `src/hooks/use-progress.ts` — `liteMode` default/storage/action; optional `skills?` param on `getLevelPercent`
+- [x] `src/components/roadmap-view.tsx` — Lite/Full pill toggle; `baseLevels` pre-filter; overall% and tags from baseLevels
+- [x] `src/components/level-card.tsx` — pass filtered skills to `getLevelPercent` for accurate per-level %
+- [x] `src/components/header-progress.tsx` — header progress bar respects liteMode
+PR: _pending_
+
 ## Phase 5 — Deferred / optional
 - [ ] Cloud sync (Vercel Postgres + NextAuth)
 - [ ] Custom domain

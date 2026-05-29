@@ -1,11 +1,13 @@
 'use client'
 
 import { useProgress, getOverallPercent, getWeeklyHours } from '@/hooks/use-progress'
+import { getLiteFilteredLevels } from '@/data/lite-mode'
 import { levels } from '@/data/roadmap'
 
 export function HeaderProgress() {
   const { progress } = useProgress()
-  const pct = getOverallPercent(levels, progress)
+  const displayLevels = progress.liteMode ? getLiteFilteredLevels(levels) : levels
+  const pct = getOverallPercent(displayLevels, progress)
   const weeklyHours = getWeeklyHours(progress.timeEntries)
 
   return (
